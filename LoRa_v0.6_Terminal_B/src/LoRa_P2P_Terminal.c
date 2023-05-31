@@ -340,7 +340,8 @@ void T_SendReceivedLoRaMessage(uint8_t message)
 	}
 	else
 	{
-		T_BroadcastMessageToFerry(SEND_MESSAGE_AGAIN);
+		//T_BroadcastMessageToFerry(SEND_MESSAGE_AGAIN);
+		return;
 	}
 }
 
@@ -359,6 +360,13 @@ bool T_B_CheckIdentifier(uint8_t LoRa_message)
 	int MSB_LoRA_message = (LoRa_message & 0xC0);	// 2 MSB of received message
 	
 	return MSB_LoRA_message == TEBID;				// Return true if identifier matches
+}
+
+bool M_CheckIdentifier(uint8_t LoRa_message)
+{
+	int MSB_LoRA_message = (LoRa_message & 0xC0);	// 2 MSB of received message
+	
+	return MSB_LoRA_message == FEID;				// Return true if identifier matches
 }
 
 

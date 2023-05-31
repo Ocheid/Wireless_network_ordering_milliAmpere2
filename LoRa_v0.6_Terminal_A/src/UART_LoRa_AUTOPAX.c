@@ -96,6 +96,6 @@ void UART_SAM_To_RPi(uint8_t* data)
 }
 
 void UART_SAM_To_IO(uint8_t* data)
-{
+ {
 	usart_write_buffer_wait(&UART_IO, data, 1);
 }

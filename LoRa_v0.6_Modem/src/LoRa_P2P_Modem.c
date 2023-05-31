@@ -109,6 +109,7 @@ void M_BroadcastMessageToTerminal(uint8_t signal)
 	{
 		previousMessage[i] = signal;
 		dataPtr[dataLen++] = signal;
+		sio2host_putchar(dataPtr[i]);
 	}
 			
 	// Broadcast the message
@@ -133,7 +134,8 @@ void M_SendReceivedUARTMessage(uint8_t message)
 		case TEAID_GCMD_RESET:
 			break;
 			
-		case TEAID_GCMD_OPEN: 
+		case TEAID_GCMD_OPEN:
+			ferryState = TEAID; 
 			printf("\n Open gate at terminal A from IO \n\r");
 			break;
 			
@@ -148,6 +150,7 @@ void M_SendReceivedUARTMessage(uint8_t message)
 			break;
 			
 		case TEBID_GCMD_OPEN:
+			ferryState = TEBID;
 			printf("\n Open gate at terminal B from IO \n\r");
 			break;
 			
@@ -189,7 +192,6 @@ void M_SendReceivedUARTMessage(uint8_t message)
 			break;
 			
 		case TEAID_FPROC_DCOMP:
-			ferryState = TEAID;
 			if (s.front == TEAID_REQF_REQUEST)
 			{
 				pop_front(&s);
@@ -201,7 +203,6 @@ void M_SendReceivedUARTMessage(uint8_t message)
 			break;
 			
 		case TEBID_FPROC_DCOMP:
-			ferryState = TEBID;
 			if (s.front == TEBID_REQF_REQUEST)
 			{
 				pop_front(&s);
@@ -405,7 +406,8 @@ void M_SendReceivedLoRaMessage(uint8_t message)
 	}
 	else
 	{
-		M_BroadcastMessageToTerminal(SEND_MESSAGE_AGAIN);
+		//M_BroadcastMessageToTerminal(SEND_MESSAGE_AGAIN);
+		return;
 	}
 }
 
@@ -426,13 +428,14 @@ void processOrder(uint8_t receivedOrder, uint8_t terminalIdentifier)
 		case TEAID:
 			if (ferryState == TEAID)
 			{
-				
-				M_BroadcastMessageToTerminal(TEAID_GCMD_OPEN);
+				uint8_t test_1 = TEAID_GCMD_OPEN;
+				M_BroadcastMessageToTerminal(test_1);
 			}
 			else
 			{
 				push_back(&s, receivedOrder);
-				M_BroadcastMessageToTerminal(TEAID_CQUD_QCONF);
+				uint8_t test = TEAID_CQUD_QCONF;
+				M_BroadcastMessageToTerminal(test);
 				
 				uint8_t terminal_A_requst = TEAID_CQUD_QCONF;
 				UART_SAM_To_IO(&terminal_A_requst);

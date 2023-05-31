@@ -113,6 +113,20 @@ bool T_A_CheckIdentifier(uint8_t LoRa_message);
 bool T_B_CheckIdentifier(uint8_t LoRa_message);
 
 /*********************************************************************
+* Function: bool M_CheckIdentifier(uint8_t LoRa_message);
+*
+* Overview: Check if received RF signal is meant for ferry
+*
+* PreCondition:
+*
+* Input:  Received LoRa message
+*
+* Output: True if received LoRa message is for ferry
+*
+********************************************************************/
+bool M_CheckIdentifier(uint8_t LoRa_message);
+
+/*********************************************************************
 * Function: void T_B_OnDemandOrder(void);
 *
 * Overview: Order ferry if button has been pressed

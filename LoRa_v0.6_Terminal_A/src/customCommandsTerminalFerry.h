@@ -239,8 +239,4 @@
 /* Send previous message again*/
 #define SEND_MESSAGE_AGAIN			0xAA
 
-
-
-
-
 #endif

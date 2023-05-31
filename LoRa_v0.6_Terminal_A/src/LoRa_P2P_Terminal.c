@@ -74,8 +74,11 @@ void T_A_OnDemandOrder(void)
 			LED_Toggle(LED1);
 
 			T_BroadcastMessageToFerry(TEAID_REQF_REQUEST);
+			
 			port_pin_set_output_level(LED_BUTTON, true);
 			orderStatus = true;
+			
+			
 		}
 	}
 }
@@ -246,6 +249,7 @@ void T_SendReceivedUARTMessage(uint8_t message)
 // Send received LoRa message with UART
 void T_SendReceivedLoRaMessage(uint8_t message)
 {
+	printf("\n\r Received LoRa message: %x", message);
 	// Checks if received message is meant for terminal A
 	if (T_A_CheckIdentifier(message))
 	{		
@@ -273,7 +277,7 @@ void T_SendReceivedLoRaMessage(uint8_t message)
 				
 			case TEAID_CQUD_QCONF:
 				printf("\n Order confirmed, wait for ferry to arrive");
-				return;
+				break;;
 				
 			case TEAID_FREQS_REQCNT:
 				break;
@@ -351,7 +355,8 @@ void T_SendReceivedLoRaMessage(uint8_t message)
 	}
 	else
 	{
-		T_BroadcastMessageToFerry(SEND_MESSAGE_AGAIN);
+		//T_BroadcastMessageToFerry(SEND_MESSAGE_AGAIN);
+		return;
 	}
 }
 
@@ -370,6 +375,13 @@ bool T_B_CheckIdentifier(uint8_t LoRa_message)
 	int MSB_LoRA_message = (LoRa_message & 0xC0);	// 2 MSB of received message
 	
 	return MSB_LoRA_message == TEBID;			// Return true if identifier matches
+}
+
+bool M_CheckIdentifier(uint8_t LoRa_message)
+{
+	int MSB_LoRA_message = (LoRa_message & 0xC0);	// 2 MSB of received message
+	
+	return MSB_LoRA_message == FEID;				// Return true if identifier matches
 }
 
 void init_order_button(void)
