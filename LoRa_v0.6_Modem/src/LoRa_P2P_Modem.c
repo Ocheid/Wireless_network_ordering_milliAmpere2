@@ -428,32 +428,38 @@ void processOrder(uint8_t receivedOrder, uint8_t terminalIdentifier)
 		case TEAID:
 			if (ferryState == TEAID)
 			{
-				uint8_t test_1 = TEAID_GCMD_OPEN;
-				M_BroadcastMessageToTerminal(test_1);
+				uint8_t teaid_gcmd_open = TEAID_GCMD_OPEN;
+				M_BroadcastMessageToTerminal(teaid_gcmd_open);
 			}
 			else
 			{
 				push_back(&s, receivedOrder);
-				uint8_t test = TEAID_CQUD_QCONF;
-				M_BroadcastMessageToTerminal(test);
+
+				uint8_t terminal_A_conf = TEAID_CQUD_QCONF;
 				
-				uint8_t terminal_A_requst = TEAID_CQUD_QCONF;
-				UART_SAM_To_IO(&terminal_A_requst);
+				// Send queue confirmed
+				M_BroadcastMessageToTerminal(terminal_A_conf);
+				
+				UART_SAM_To_IO(&terminal_A_conf);
 			}
 			break;
 		
 		case TEBID:
 			if (ferryState == TEBID)
 			{
-				M_BroadcastMessageToTerminal(TEBID_GCMD_OPEN);
+				uint8_t tebid_gcmd_open = TEBID_GCMD_OPEN;
+				M_BroadcastMessageToTerminal(tebid_gcmd_open);
 			}
 			else
 			{
 				push_back(&s, receivedOrder);
-				M_BroadcastMessageToTerminal(TEBID_CQUD_QCONF);
 				
-				uint8_t terminal_B_requst = TEBID_CQUD_QCONF;
-				UART_SAM_To_IO(&terminal_B_requst);
+				uint8_t terminal_B_conf = TEBID_CQUD_QCONF; 
+				
+				// send queue confirmed
+				M_BroadcastMessageToTerminal(terminal_B_conf);
+
+				UART_SAM_To_IO(&terminal_B_conf);
 			}
 			break;
 		
